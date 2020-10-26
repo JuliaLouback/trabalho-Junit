@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="resources.view.ControllerViewFuncionario">
+   <children>
+      <Label layoutX="40.0" layoutY="64.0" text="Lista de Funcionários" textFill="#0062cc">
+         <font>
+            <Font name="Arial Bold" size="42.0" />
+         </font>
+      </Label>
+      <MenuBar layoutX="-1.0" layoutY="1.0" prefHeight="30.0" prefWidth="1280.0" style="-fx-background-color: #e0e0e0; -fx-padding: 3px;" stylesheets="@../css/style.css">
+        <menus>
+          <Menu mnemonicParsing="false" text="Menu">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Inicial" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Sair">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#Fechar" text="Logout" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TableView fx:id="tabela" layoutX="40.0" layoutY="250.0" prefHeight="580.0" prefWidth="1190.0" stylesheets="@../css/style.css">
+        <columns>
+          <TableColumn fx:id="Nome" minWidth="350.0" prefWidth="300.0" text="Nome" />
+          <TableColumn fx:id="Cpf" minWidth="150.0" prefWidth="250.0" text="CPF" />
+            <TableColumn fx:id="Cargo" minWidth="150.0" prefWidth="300.0" text="Cargo" />
+        </columns>
+      </TableView>
+      <Separator layoutX="40.0" layoutY="127.0" prefHeight="0.0" prefWidth="1190.0" />
+      <Button fx:id="btnAdd" layoutX="1095.0" layoutY="160.0" mnemonicParsing="false" onAction="#AdicionarFuncionario" style="-fx-background-color: #197ce6;" text="Cadastrar" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="22.0" />
+         </font>
+      </Button>
+      <Label layoutX="40.0" layoutY="170.0" text="Total de Registros:">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelChange" layoutX="245.0" layoutY="170.0" text="Total de Registros:" textFill="#197ce6">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
