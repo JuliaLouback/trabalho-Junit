@@ -26,6 +26,7 @@ import javafx.util.Callback;
 import main.dao.DaoFuncionario;
 import main.entity.Funcionario;
 import main.util.ShowAlert;
+import main.util.ValidacaoCPF;
 
 public class ControllerViewFuncionario implements Initializable{
 

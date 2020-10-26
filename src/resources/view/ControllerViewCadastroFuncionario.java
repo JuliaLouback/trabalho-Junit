@@ -23,6 +23,7 @@ import main.dao.DaoFuncionario;
 import main.entity.Funcionario;
 import main.util.MaskFieldUtil;
 import main.util.ShowAlert;
+import main.util.ValidacaoCPF;
 
 public class ControllerViewCadastroFuncionario implements Initializable{
 
@@ -105,13 +106,23 @@ public class ControllerViewCadastroFuncionario implements Initializable{
 			funcionario.setSalario(Float.parseFloat(Salario.getText()));
 			funcionario.setData_nascimento(Data_nascimento.getValue());
 			
-			if(new DaoFuncionario().inserirFuncionario(funcionario)) {
-			
-				new ShowAlert().sucessoAlert("Funcionário adicionado com sucesso!");
+			if(new ValidacaoCPF().validaCpf(funcionario.getCpf())) {
 				
-				Stage stage = (Stage) btnVoltar.getScene().getWindow(); 
-			    ControllerViewFuncionario irTela = new ControllerViewFuncionario();
-			    irTela.start(stage);
+				if(!new DaoFuncionario().verificarFuncionario(funcionario.getCpf())) {
+					if(new DaoFuncionario().inserirFuncionario(funcionario)) {
+					
+						new ShowAlert().sucessoAlert("Funcionário adicionado com sucesso!");
+						
+						Stage stage = (Stage) btnVoltar.getScene().getWindow(); 
+					    ControllerViewFuncionario irTela = new ControllerViewFuncionario();
+					    irTela.start(stage);
+					} else {
+						new ShowAlert().erroAlert("CPF já cadastrado!");
+
+					}
+				}
+			} else {
+				new ShowAlert().erroAlert("CPF Inválido!");
 			}
 		} 
 	}
