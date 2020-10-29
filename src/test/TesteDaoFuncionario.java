@@ -2,28 +2,33 @@ package test;
 
 import static org.junit.Assert.*;
 
-import java.awt.List;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Tag;
 
 import main.dao.DaoFuncionario;
 import main.entity.Funcionario;
 import main.repository.CNXJDBC;
+import main.util.ValidacaoCPF;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class TesteDaoFuncionario {
-
+	
 	@Test
 	@Order(1)
+	@Tag("success")
 	@DisplayName("Teste Conexão BD")
-	public void testeConexaoBd() {
+	@BeforeClass
+	void testeConexaoBd() {
 
 		Connection resultado = new CNXJDBC().conexaoBanco();
 		
@@ -32,18 +37,27 @@ public class TesteDaoFuncionario {
 	
 	@Test
 	@Order(2)
+	@Tag("success")
 	@DisplayName("Teste Verificar Funcionário Cpf")
-	public void testeVerificarFuncionario() {
+	void testeVerificarFuncionario() {
 		
-		boolean resultado = new DaoFuncionario().verificarFuncionario("490.736.100-95");
+		String Cpf = "490.736.100-95";
 		
+		boolean resultado = false;
+		
+		if(new ValidacaoCPF().validaCpf(Cpf)) {
+			resultado = new DaoFuncionario().verificarFuncionario(Cpf);
+		}
+		 
 		assertFalse(resultado);		
 	}
 	
 	@Test
 	@Order(3)
+	@Tag("success")
+	@Tag("error")
 	@DisplayName("Teste Inserir Funcionário")
-	public void testeInsertFuncionario() {
+	void testeInsertFuncionario() {
 		
 		LocalDate localdate = LocalDate.parse("2001-11-23");
 		
@@ -56,23 +70,19 @@ public class TesteDaoFuncionario {
 		funcionario.setSalario(1000.98f);
 		funcionario.setData_nascimento(localdate);
 		
-		/*if(!new DaoFuncionario().verificarFuncionario(funcionario.getCpf())) {
+		if(!new DaoFuncionario().verificarFuncionario(funcionario.getCpf())) {
 			boolean resultado = new DaoFuncionario().inserirFuncionario(funcionario);
 			
 			assertTrue(resultado);	
 		}
-		*/
 		
-		boolean resultado = new DaoFuncionario().inserirFuncionario(funcionario);
-		
-		assertTrue(resultado);	
-			
 	}
 	
 	@Test
 	@Order(4)
+	@Tag("success")
 	@DisplayName("Teste Editar Funcionário")
-	public void testeEditarFuncionario() {
+	void testeEditarFuncionario() {
 		
 		LocalDate localdate = LocalDate.parse("2001-11-23");
 		
@@ -93,8 +103,9 @@ public class TesteDaoFuncionario {
 	
 	@Test
 	@Order(5)
+	@Tag("success")
 	@DisplayName("Teste Listar Funcionário")
-	public void testeListarFuncionario() {
+	void testeListarFuncionario() {
 		
 
 		ArrayList<Funcionario> lista = new DaoFuncionario().listarFuncionario();
@@ -104,8 +115,9 @@ public class TesteDaoFuncionario {
 
 	@Test
 	@Order(6)
+	@Tag("success")
 	@DisplayName("Teste Deletar Funcionário")
-	public void testeDeletarFuncionario() {
+	void testeDeletarFuncionario() {
 		
 		String Cpf = "490.736.100-95";
 		
@@ -114,5 +126,29 @@ public class TesteDaoFuncionario {
 		assertTrue(resultado);	
 			
 	}
+	
+	@Test
+	@Order(7)
+	@Tag("error")
+	@DisplayName("Teste Inserir Funcionário Duplicado")
+	void testeInsertFuncionarioDuplicado() throws SQLException {
+		
+		LocalDate localdate = LocalDate.parse("2001-11-23");
+		
+		Funcionario funcionario = new Funcionario();
+		
+		funcionario.setNome("Pedro Ernesto Alves");
+		funcionario.setCpf("490.736.100-95");
+		funcionario.setEmail("pedro@gmail.com");
+		funcionario.setCargo("Gerente");
+		funcionario.setSalario(1000.98f);
+		funcionario.setData_nascimento(localdate);
+		
+		new DaoFuncionario().inserirFuncionario(funcionario);
+		
+	}
+	
+	
 
 }
+

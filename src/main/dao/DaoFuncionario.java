@@ -37,9 +37,8 @@ public class DaoFuncionario extends CNXJDBC {
 			
 			return true;
 		} catch (SQLException e) {
-			System.out.println(e.getErrorCode());
+			 
 			new ShowAlert().erroAlert("Erro ao editar funcionário: CPF já esta cadastrado!");
-			System.out.println("Erro ao executar o Statment " + e.toString());
 			return false;
 
 		}
