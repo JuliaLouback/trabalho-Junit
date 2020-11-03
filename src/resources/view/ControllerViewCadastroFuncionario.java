@@ -24,6 +24,7 @@ import main.entity.Funcionario;
 import main.util.MaskFieldUtil;
 import main.util.ShowAlert;
 import main.util.ValidacaoCPF;
+import main.util.ValidacaoEmail;
 
 public class ControllerViewCadastroFuncionario implements Initializable{
 
@@ -107,19 +108,22 @@ public class ControllerViewCadastroFuncionario implements Initializable{
 			funcionario.setData_nascimento(Data_nascimento.getValue());
 			
 			if(new ValidacaoCPF().validaCpf(funcionario.getCpf())) {
-				
-				if(!new DaoFuncionario().verificarFuncionario(funcionario.getCpf())) {
-					if(new DaoFuncionario().inserirFuncionario(funcionario)) {
-					
-						new ShowAlert().sucessoAlert("Funcionário adicionado com sucesso!");
+				if(new ValidacaoEmail().emailValido(funcionario.getEmail())) {
+					if(!new DaoFuncionario().verificarFuncionario(funcionario.getCpf())) {
+						if(new DaoFuncionario().inserirFuncionario(funcionario)) {
 						
-						Stage stage = (Stage) btnVoltar.getScene().getWindow(); 
-					    ControllerViewFuncionario irTela = new ControllerViewFuncionario();
-					    irTela.start(stage);
-					} else {
-						new ShowAlert().erroAlert("CPF já cadastrado!");
-
+							new ShowAlert().sucessoAlert("Funcionário adicionado com sucesso!");
+							
+							Stage stage = (Stage) btnVoltar.getScene().getWindow(); 
+						    ControllerViewFuncionario irTela = new ControllerViewFuncionario();
+						    irTela.start(stage);
+						} else {
+							new ShowAlert().erroAlert("CPF já cadastrado!");
+	
+						}
 					}
+				}  else {
+					new ShowAlert().erroAlert("E-mail Inválido!");
 				}
 			} else {
 				new ShowAlert().erroAlert("CPF Inválido!");
@@ -140,14 +144,18 @@ public class ControllerViewCadastroFuncionario implements Initializable{
 			funcionario.setData_nascimento(Data_nascimento.getValue());
 			funcionario.setId(funcionarios.getId());
 			
-			if(new DaoFuncionario().alterarFuncionario(funcionario)) {
-				new ShowAlert().sucessoAlert("Funcionário editado com sucesso!");
-	
-				Stage stage = (Stage) btnVoltar.getScene().getWindow(); 
-			    ControllerViewFuncionario irTela = new ControllerViewFuncionario();
-			    irTela.start(stage);
-			} else {
-				new ShowAlert().erroAlert("Erro ao editar funcionário: CPF já esta cadastrado!");
+			if(new ValidacaoEmail().emailValido(funcionario.getEmail())) {
+				if(new DaoFuncionario().alterarFuncionario(funcionario)) {
+					new ShowAlert().sucessoAlert("Funcionário editado com sucesso!");
+		
+					Stage stage = (Stage) btnVoltar.getScene().getWindow(); 
+				    ControllerViewFuncionario irTela = new ControllerViewFuncionario();
+				    irTela.start(stage);
+				} else {
+					new ShowAlert().erroAlert("Erro ao editar funcionário: CPF já esta cadastrado!");
+				}
+			}  else {
+				new ShowAlert().erroAlert("E-mail Inválido!");
 			}
 		}
 	}

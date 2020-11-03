@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -35,6 +36,7 @@ public class TesteDaoFuncionario {
 		assertNotNull(resultado);				
 	}
 	
+	
 	@Test
 	@Order(2)
 	@Tag("success")
@@ -51,6 +53,7 @@ public class TesteDaoFuncionario {
 		 
 		assertFalse(resultado);		
 	}
+	
 	
 	@Test
 	@Order(3)
@@ -74,9 +77,9 @@ public class TesteDaoFuncionario {
 			boolean resultado = new DaoFuncionario().inserirFuncionario(funcionario);
 			
 			assertTrue(resultado);	
-		}
-		
+		}	
 	}
+	
 	
 	@Test
 	@Order(4)
@@ -97,38 +100,58 @@ public class TesteDaoFuncionario {
 		
 		boolean resultado = new DaoFuncionario().alterarFuncionario(funcionario);
 		
-		assertTrue(resultado);	
-			
+		assertTrue(resultado);			
 	}
+	
 	
 	@Test
 	@Order(5)
 	@Tag("success")
-	@DisplayName("Teste Listar Funcionário")
+	@DisplayName("Teste Lista Não Nula")
 	void testeListarFuncionario() {
 		
-
 		ArrayList<Funcionario> lista = new DaoFuncionario().listarFuncionario();
 			
 		assertNotEquals(0, lista.size());
 	}
-
+	
+	
 	@Test
 	@Order(6)
 	@Tag("success")
-	@DisplayName("Teste Deletar Funcionário")
-	void testeDeletarFuncionario() {
+	@DisplayName("Teste Listar Funcionário")
+	void testeListarFuncionarioCpf() {
 		
 		String Cpf = "490.736.100-95";
+
+		ArrayList<Funcionario> arrayLista = new DaoFuncionario().listarFuncionario();
 		
-		boolean resultado = new DaoFuncionario().excluirFuncionario(Cpf);
-		
-		assertTrue(resultado);	
-			
+		boolean funcionarioExiste = arrayLista.stream().anyMatch(funcionario -> Cpf.equals(funcionario.getCpf()));
+	
+		assertTrue(funcionarioExiste);
 	}
+
 	
 	@Test
 	@Order(7)
+	@Tag("failure")
+	@DisplayName("Teste Verificar Funcionário Cpf já cadastrado")
+	void testeVerificarFuncionarioFalha() {
+		
+		String Cpf = "490.736.100-95";
+		
+		boolean resultado = false;
+		
+		if(new ValidacaoCPF().validaCpf(Cpf)) {
+			resultado = new DaoFuncionario().verificarFuncionario(Cpf);
+		}
+		 
+		assertEquals(true, resultado);		
+	}
+
+	
+	@Test
+	@Order(8)
 	@Tag("error")
 	@DisplayName("Teste Inserir Funcionário Duplicado")
 	void testeInsertFuncionarioDuplicado() throws SQLException {
@@ -144,11 +167,57 @@ public class TesteDaoFuncionario {
 		funcionario.setSalario(1000.98f);
 		funcionario.setData_nascimento(localdate);
 		
-		new DaoFuncionario().inserirFuncionario(funcionario);
-		
+		assertTrue(new DaoFuncionario().inserirFuncionario(funcionario));	
 	}
 	
 	
+	@Test
+	@Order(9)
+	@Tag("failure")
+	@DisplayName("Teste Editar Funcionário CPF Errado")
+	void testeEditarFuncionarioCpfFalha() throws SQLException {
+		
+		LocalDate localdate = LocalDate.parse("2001-11-23");
+		
+		Funcionario funcionario = new Funcionario();
+		
+		funcionario.setNome("Pedro Ernesto Alves");
+		funcionario.setCpf("490.736.100-99");
+		funcionario.setEmail("pedro@gmail.com");
+		funcionario.setCargo("Gerente");
+		funcionario.setSalario(1000.98f);
+		funcionario.setData_nascimento(localdate);
+		
+		assertFalse(new DaoFuncionario().alterarFuncionario(funcionario));	
+	}
+
+	
+	@Test
+	@Order(10)
+	@Tag("success")
+	@DisplayName("Teste Deletar Funcionário CPF Errado")
+	void testeDeletarFuncionarioCpfFalha() {
+		
+		String Cpf = "490.736.100-99";
+		
+		boolean resultado = new DaoFuncionario().excluirFuncionario(Cpf);
+		
+		assertFalse(resultado);	
+	}
+	
+	@Test
+	@Order(11)
+	@Tag("success")
+	@DisplayName("Teste Deletar Funcionário")
+	void testeDeletarFuncionario() {
+		
+		String Cpf = "490.736.100-95";
+		
+		boolean resultado = new DaoFuncionario().excluirFuncionario(Cpf);
+		
+		assertTrue(resultado);	
+	}
+
 
 }
 

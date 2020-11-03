@@ -15,14 +15,12 @@ public class DaoFuncionario extends CNXJDBC {
 
 	private final String SQL_INSERE_FUNCIONARIO = "INSERT INTO Funcionario (Cpf,Nome,Email, Cargo, Data_nascimento, Salario) VALUES (?,?,?,?,?,?);";
 
-	private final String SQL_SELECIONA_FUNCIONARIO = "SELECT * FROM Funcionario";
+	private final String SQL_SELECIONA_FUNCIONARIO = "SELECT * FROM Funcionario order by Nome asc";
 	
 	private final String SQL_ALTERA_FUNCIONARIO = "UPDATE Funcionario set Nome = ?, Email = ? , Cargo = ?, Data_nascimento = ?,"
 			+ "Salario = ? WHERE Cpf = ?;";
 	
 	private final String SQL_EXCLUI_FUNCIONARIO = "DELETE FROM Funcionario  WHERE Cpf = ?;";
-
-	private PreparedStatement pst = null;
 
 	public boolean inserirFuncionario(Funcionario funcionario) {
 	
@@ -81,9 +79,14 @@ public class DaoFuncionario extends CNXJDBC {
 			pst.setFloat(5, funcionario.getSalario());
 			pst.setString(6,  funcionario.getCpf());
 			
-			pst.execute();
-		
-			return true;
+			boolean resultado = false;
+			
+			int rowsUpdated = pst.executeUpdate();
+			if (rowsUpdated > 0) {
+				resultado = true;
+			}
+			
+			return resultado;
 		} catch (SQLException e) {
 			System.out.println("Erro ao executar o Statment " + e.toString());
 		}	
@@ -94,9 +97,15 @@ public class DaoFuncionario extends CNXJDBC {
 	 public boolean excluirFuncionario(String cpf) {
 		try (Connection conn = this.conexaoBanco(); PreparedStatement pst = conn.prepareStatement(SQL_EXCLUI_FUNCIONARIO);) {
 			pst.setString(1, cpf);
-			pst.execute();
 			
-			return true;
+			boolean resultado = false;
+			
+			int rowsUpdated = pst.executeUpdate();
+			if (rowsUpdated > 0) {
+				resultado = true;
+			}
+			
+			return resultado;
 		} catch (SQLException e) {
 			System.out.println("Erro ao executar o Statment " + e.toString());
 		}

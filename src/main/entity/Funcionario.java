@@ -80,6 +80,13 @@ public class Funcionario {
 		Salario = salario;
 	}
 
+
+	@Override
+	public String toString() {
+		return "Funcionario [Id=" + Id + ", Cpf=" + Cpf + ", Email=" + Email + ", Nome=" + Nome + ", Cargo=" + Cargo
+				+ ", Data_nascimento=" + Data_nascimento + ", Salario=" + Salario + "]";
+	}
+
 	
 	
 }
