@@ -39,6 +39,7 @@ public class TesteValidacaoCPF {
 		
 	}
 	
+	
 	@Test
 	@Order(3)
 	@Tag("failure")
@@ -50,6 +51,7 @@ public class TesteValidacaoCPF {
 		assertEquals(false,resultado);
 		
 	}
+	
 	
 	@Test
 	@Order(4)

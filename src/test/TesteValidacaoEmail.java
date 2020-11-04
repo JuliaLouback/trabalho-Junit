@@ -26,6 +26,7 @@ public class TesteValidacaoEmail {
 		assertTrue(new ValidacaoEmail().emailValido(email));		
 	}
 	
+	
 	@Test
 	@Order(2)
 	@Tag("success")
@@ -36,6 +37,7 @@ public class TesteValidacaoEmail {
 		
 		assertFalse(new ValidacaoEmail().emailValido(email));		
 	}
+	
 	
 	@Test
 	@Order(3)
