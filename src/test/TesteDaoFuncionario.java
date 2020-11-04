@@ -58,7 +58,7 @@ public class TesteDaoFuncionario {
 	@Test
 	@Order(3)
 	@Tag("success")
-	@Tag("error")
+	@Tag("failure")
 	@DisplayName("Teste Inserir Funcionário")
 	void testeInsertFuncionario() {
 		
@@ -107,7 +107,7 @@ public class TesteDaoFuncionario {
 	@Test
 	@Order(5)
 	@Tag("success")
-	@DisplayName("Teste Lista Não Nula")
+	@DisplayName("Teste Lista Não Vazia")
 	void testeListarFuncionario() {
 		
 		ArrayList<Funcionario> lista = new DaoFuncionario().listarFuncionario();
@@ -134,9 +134,9 @@ public class TesteDaoFuncionario {
 	
 	@Test
 	@Order(7)
-	@Tag("failure")
-	@DisplayName("Teste Verificar Funcionário Cpf já cadastrado")
-	void testeVerificarFuncionarioFalha() {
+	@Tag("success")
+	@DisplayName("Teste Verificar Funcionário Cpf Cadastrado")
+	void testeVerificarFuncionarioJaCadastrado() {
 		
 		String Cpf = "490.736.100-95";
 		
@@ -150,32 +150,12 @@ public class TesteDaoFuncionario {
 	}
 
 	
+	
 	@Test
 	@Order(8)
-	@Tag("error")
-	@DisplayName("Teste Inserir Funcionário Duplicado")
-	void testeInsertFuncionarioDuplicado() throws SQLException {
-		
-		LocalDate localdate = LocalDate.parse("2001-11-23");
-		
-		Funcionario funcionario = new Funcionario();
-		
-		funcionario.setNome("Pedro Ernesto Alves");
-		funcionario.setCpf("490.736.100-95");
-		funcionario.setEmail("pedro@gmail.com");
-		funcionario.setCargo("Gerente");
-		funcionario.setSalario(1000.98f);
-		funcionario.setData_nascimento(localdate);
-		
-		assertTrue(new DaoFuncionario().inserirFuncionario(funcionario));	
-	}
-	
-	
-	@Test
-	@Order(9)
-	@Tag("failure")
+	@Tag("success")
 	@DisplayName("Teste Editar Funcionário CPF Errado")
-	void testeEditarFuncionarioCpfFalha() throws SQLException {
+	void testeEditarFuncionarioCpfErrado() {
 		
 		LocalDate localdate = LocalDate.parse("2001-11-23");
 		
@@ -193,10 +173,10 @@ public class TesteDaoFuncionario {
 
 	
 	@Test
-	@Order(10)
+	@Order(9)
 	@Tag("success")
 	@DisplayName("Teste Deletar Funcionário CPF Errado")
-	void testeDeletarFuncionarioCpfFalha() {
+	void testeDeletarFuncionarioCpfErrado() {
 		
 		String Cpf = "490.736.100-99";
 		
@@ -205,8 +185,83 @@ public class TesteDaoFuncionario {
 		assertFalse(resultado);	
 	}
 	
+	
+	@Test
+	@Order(10)
+	@Tag("failure")
+	@DisplayName("Teste Verificar Funcionário Cpf Cadastrado Falha")
+	void testeVerificarFuncionarioErrado() {
+		
+		String Cpf = "490.736.100-95";
+		
+		boolean resultado = false;
+		
+		if(new ValidacaoCPF().validaCpf(Cpf)) {
+			resultado = new DaoFuncionario().verificarFuncionario(Cpf);
+		}
+		 
+		assertEquals(false, resultado);		
+	}
+
+	
 	@Test
 	@Order(11)
+	@Tag("failure")
+	@DisplayName("Teste Inserir Funcionário Duplicado")
+	void testeInsertFuncionarioDuplicado() {
+		
+		LocalDate localdate = LocalDate.parse("2001-11-23");
+		
+		Funcionario funcionario = new Funcionario();
+		
+		funcionario.setNome("Pedro Ernesto Alves");
+		funcionario.setCpf("490.736.100-95");
+		funcionario.setEmail("pedro@gmail.com");
+		funcionario.setCargo("Gerente");
+		funcionario.setSalario(1000.98f);
+		funcionario.setData_nascimento(localdate);
+		
+		assertThrows(SQLException.class, () -> { new DaoFuncionario().inserirFuncionario(funcionario);});	
+	}
+	
+	
+	@Test
+	@Order(12)
+	@Tag("failure")
+	@DisplayName("Teste Deletar Funcionário CPF Falha")
+	void testeDeletarFuncionarioCpfFalha() {
+		
+		String Cpf = "490.736.100-99";
+		
+		boolean resultado = new DaoFuncionario().excluirFuncionario(Cpf);
+		
+		assertTrue(resultado);	
+	}
+	
+	
+	@Test
+	@Order(12)
+	@Tag("failure")
+	@DisplayName("Teste Editar Funcionário CPF Falha")
+	void testeEditarFuncionarioCpfFalha() {
+		
+		LocalDate localdate = LocalDate.parse("2001-11-23");
+		
+		Funcionario funcionario = new Funcionario();
+		
+		funcionario.setNome("Pedro Ernesto Alves");
+		funcionario.setCpf("490.736.100-99");
+		funcionario.setEmail("pedro@gmail.com");
+		funcionario.setCargo("Gerente");
+		funcionario.setSalario(1000.98f);
+		funcionario.setData_nascimento(localdate);
+		
+		assertTrue(new DaoFuncionario().alterarFuncionario(funcionario));	
+	}
+	
+	
+	@Test
+	@Order(14)
 	@Tag("success")
 	@DisplayName("Teste Deletar Funcionário")
 	void testeDeletarFuncionario() {
